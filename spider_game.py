@@ -15,7 +15,12 @@ from games.items import GameItem, Field
 class SpiderGame( Spider ):
 	name = 'spider_game'
 	allowed_domains = ["vgchartz.com"]
+
+	# start_urls = ["http://www.vgchartz.com/yearly/2006/Japan/"]
 	start_urls = ["http://www.vgchartz.com/yearly/2006/USA/"]
+	# start_urls = ["http://www.vgchartz.com/yearly/2006/Global/"]
+	# start_urls = ["http://www.vgchartz.com/yearly/2006/Europe/"]
+	# start_urls = ["http://www.vgchartz.com/yearly/2006/Global/"]
 
 
 	def parse(self, response):
@@ -23,15 +28,21 @@ class SpiderGame( Spider ):
 		# rows = response.xpath('//table[contains(@id,"chart_body")]')
 
 		for row in rows[1:]:
-			rank = row.xpath('.//td[1]/text()').extract() # response.xpath('//*[@id="chart_body"]/table//td[1]/text()').extract()
-			video_game = row.xpath('.//a/text()').extract() # response.xpath('//*[@id="chart_body"]/table//a/text()').extract()
-			console = row.xpath('.//tr/td[2]/text()[1]').extract_first() # response.xpath('//*[@id="new_entry"]//tr/td[2]/text()[1]').extract()
+			rank = row.xpath('.//td[1]/text()').extract_first() # response.xpath('//*[@id="chart_body"]/table//td[1]/text()').extract()
+			video_game = row.xpath('.//a/text()').extract_first() # response.xpath('//*[@id="chart_body"]/table//a/text()').extract()
+			console = row.xpath('.//tr/td[2]/text()[1]').extract_first() # response.xpath('//*[@id="new_entry"]//tr/td[2]/text()[1]').extract_first()
 			company_genre = row.xpath('.//text()[2]')[2].extract() # response.xpath('//*[@id="chart_body"]/table//text()[2]')[2].extract() 	
-			year = row.xpath('//*[@id="chart_body"]//center/p/a[1]/text()').extract() # response.xpath('//*[@id="chart_body"]//center/p/a[1]/text()').extract()
-			weeks_out = row.xpath('.//td[3]/text()').extract() # response.xpath('//*[@id="chart_body"]/table//td[3]').extract()
-			yearly_sale = row.xpath('.//td[4]/text()').extract() # response.xpath('//*[@id="chart_body"]/table//td[4]/text()]').extract()
-			total_sale = row.xpath('.//td[5]/text()').extract() # response.xpath('//*[@id="chart_body"]/table//td[5]/text()').extract()
-			
+			year = row.xpath('//*[@id="chart_body"]//center/p/a[1]/text()').extract_first() # response.xpath('//*[@id="chart_body"]//center/p/a[1]/text()').extract()
+			weeks_out = row.xpath('.//td[3]/text()').extract_first() # response.xpath('//*[@id="chart_body"]/table//td[3]').extract()
+			yearly_sale = row.xpath('.//td[4]/text()').extract_first() # response.xpath('//*[@id="chart_body"]/table//td[4]/text()]').extract()
+			total_sale = row.xpath('.//td[5]/text()').extract_first() # response.xpath('//*[@id="chart_body"]/table//td[5]/text()').extract()
+			country = row.xpath('//*[@id="chart_body"]//tr[3]/td[1]/a/text()').extract_first() # USA response.xpath('.//*[@id="chart_body"]//tr[3]/td[1]/a/text()').extract()
+			# country = row.xpath('//*[@id="chart_body"]//tr[3]/td[3]/a/text()').extract_first() # JAPAN response.xpath('.//*[@id="chart_body"]//tr[3]/td[3]/a/text()').extract()
+			# country = row.xpath('//*[@id="chart_body"]//tr[3]/td[2]/a/text()').extract_first() # EUROPE response.xpath('.//*[@id="chart_body"]//tr[3]/td[2]/a/text()').extract()
+
+			# country = row.xpath('//*[@id="chart_body"]//tr[2]/td/a/text()').extract_first() # GLOBAL response.xpath('.//*[@id="chart_body"]//tr[2]/td/a/text()').extract()
+
+
 			# Items
 			item = GameItem()
 			item['rank'] = rank			
@@ -42,12 +53,16 @@ class SpiderGame( Spider ):
 			item['weeks_out'] = weeks_out
 			item['yearly_sale'] = yearly_sale
 			item['total_sale'] = total_sale
-	
+			item['country'] = country
 			yield item
 
 
 			# Page iteration
-			country = ['USA','JAPAN','EUROPE','GLOBAL']
+			# country = ['Japan']
+			country = ['USA'] 
+			# country = ['Global']
+			# country = ['Europe']
+			# country = ['USA', 'Europe','Japan','Global']
 			year = range(2006,2019)
 			urls = []
 
