@@ -17,12 +17,27 @@ class SpiderGame( Spider ):
 	allowed_domains = ["vgchartz.com"]
 
 	# start_urls = ["http://www.vgchartz.com/yearly/2006/Japan/"]
-	start_urls = ["http://www.vgchartz.com/yearly/2006/USA/"]
+	# start_urls = ["http://www.vgchartz.com/yearly/2006/USA/"]
 	# start_urls = ["http://www.vgchartz.com/yearly/2006/Global/"]
 	# start_urls = ["http://www.vgchartz.com/yearly/2006/Europe/"]
 	# start_urls = ["http://www.vgchartz.com/yearly/2006/Global/"]
 
+	# start_urls = ["http://www.vgchartz.com/weekly/38396/Japan/"]
+	start_urls = ["http://www.vgchartz.com/weekly/38396/USA/"]
+	# start_urls = ["http://www.vgchartz.com/weekly/38396/Global/"]
+	# start_urls = ["http://www.vgchartz.com/weekly/38396/Europe/"]
+	# start_urls = ["http://www.vgchartz.com/weekly/38396/Global/"]
 
+# //*[@id="chart_body"]/div/div[2]/form/center/p/select/option[1]
+# //*[@id="chart_body"]/div/div[2]/form/center/p/select
+# //*[@id="chart_body"]//form/center/p/select/option[1]
+# /html/body/div[3]/div[1]/div[2]/div/div[1]/div[1]/div/table/tbody/tr[3]/td[2]/a
+# response.xpath('.//*[@id="chart_body"]//tr[3]/td[1]/a/text()').extract()
+# //*[@id="chart_body"]/div/div[2]
+
+
+# 														response.xpath('.//*[@class="chart_date_selector"]//div[1]/div[2]/form/center/p/select/option[1]/text()').extract()
+# /html/body/div[3]/div[1]/div[2]/div/div[1]/div[1]/div/div[2]/form/center/p/select/option[1]
 	def parse(self, response):
 		rows = response.xpath('//*[@id="chart_body"]/table/tr')
 		# rows = response.xpath('//table[contains(@id,"chart_body")]')
@@ -59,12 +74,23 @@ class SpiderGame( Spider ):
 
 			# Page iteration
 			# country = ['Japan']
-			country = ['USA'] 
+			# country = ['USA'] 
 			# country = ['Global']
 			# country = ['Europe']
-			# country = ['USA', 'Europe','Japan','Global']
-			year = range(2006,2019)
+			country = ['USA','Europe','Japan','Global']
+			
+			#weekly
+			# year = range(38396,38985,7) # feb 12 2005 (38396) - > dec 29 2018 (43464)
 			urls = []
+			
+			# for c in country:
+			# 	for y in year:
+			# 		urls.append('http://www.vgchartz.com/yearly/'+str(y)+'/'+c+'/')
+			# for url in urls:
+			# 	yield Request(url=url, callback=self.parse)
+
+			# yearly
+			year = range(2006,2019) # feb 12 2005 (38396) - > dec 29 2018 (43464)
 
 			for c in country:
 				for y in year:
